@@ -42,7 +42,11 @@ export const Post = ({
   }, [post.updatedAt, post.createdAt])
 
   return (
-    <div className='post-block'>
+    <div
+      className={
+        userId === post.user._id ? 'post-block post-block_self' : 'post-block'
+      }
+    >
       <div className='post-block_header'>
         <h4 className='post-blok_author'>{post.user.fullName}</h4>
         <h5 className='post-blok_date'>
