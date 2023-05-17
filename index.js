@@ -87,7 +87,7 @@ app.put(
 )
 
 app.get('*', (req, res) => {
-  return res.sendFile(path.join(__dirname, 'front', 'build', 'index.html'))
+  return res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
 })
 
 app.listen(PORT, (err) => {
