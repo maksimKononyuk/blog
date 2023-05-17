@@ -86,7 +86,11 @@ app.put(
   PostController.update
 )
 
-app.get('*', (req, res) => {
+app.get('/health/status', (req, res) => {
+  return res.status(200).end()
+})
+
+app.get('/', (req, res) => {
   return res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
 })
 
