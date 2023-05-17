@@ -11,6 +11,7 @@ import {
 import { handleValidationErrors, checkAuth } from './utils/index.js'
 import { PostController, UserController } from './Controllers/index.js'
 
+import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -89,6 +90,10 @@ app.get('*', (req, res) => {
   return res.sendFile(path.join(__dirname, 'front', 'build', 'index.html'))
 })
 
-app.listen(PORT, (err) =>
+app.listen(PORT, (err) => {
+  const uploadDir = path.join(__dirname, 'uploads')
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir)
+  }
   console.log(err ? err : `Server started... PORT ${PORT}`)
-)
+})
