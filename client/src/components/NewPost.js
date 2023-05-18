@@ -24,7 +24,7 @@ export const NewPost = ({
     setTextOfPost(event.target.value)
   }
 
-  const sendHandler = async (updatePost) => {
+  const sendHandler = async () => {
     const sendingPost = textOfPost.trim()
     setTextOfPost('')
     if (updatePost) {
@@ -91,11 +91,7 @@ export const NewPost = ({
         onKeyDown={ctrlEnterHandler}
       />
       <div className='new-post-block_send'>
-        <img
-          src={sendIcon}
-          alt='Отправить'
-          onClick={() => sendHandler(updatePost)}
-        />
+        <img src={sendIcon} alt='Отправить' onClick={sendHandler} />
       </div>
     </div>
   )

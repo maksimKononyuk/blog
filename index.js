@@ -94,6 +94,10 @@ app.get('/', (req, res) => {
   return res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
 })
 
+app.get('*', (req, res) => {
+  return res.status(404).end()
+})
+
 app.listen(PORT, (err) => {
   const uploadDir = path.join(__dirname, 'uploads')
   if (!fs.existsSync(uploadDir)) {
