@@ -6,8 +6,22 @@ import { Register } from './pages/Register'
 import { Login } from './pages/Login'
 import { Posts } from './pages/Posts'
 
+export type UserType = {
+  _id: string
+  fullName: string
+  email: string
+  createdAt: Date
+  updatedAt: Date
+  token: string
+}
+
+export type AuthType = {
+  data: null | UserType
+  status: string
+}
+
 function App() {
-  const [auth, setAuth] = useState({
+  const [auth, setAuth] = useState<AuthType>({
     data: null,
     status: 'loading'
   })
@@ -67,7 +81,7 @@ function App() {
             <Route path='/' element={<Posts auth={auth} />} />
             <Route path='/register' element={<Register />} />
             <Route path='/add_post/' element={<div>Добавление поста</div>} />
-            <Route path='/posts/' element={<Posts />} />
+            <Route path='/posts/' element={<Posts auth={auth} />} />
           </Routes>
         </div>
       )}

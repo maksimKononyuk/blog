@@ -1,11 +1,22 @@
+import { FC } from 'react'
 import { PREV, NEXT, FIRST, LAST } from '../Constants'
 
-export const Pagination = ({ pages, currentPage, setCurrentPage }) => {
-  const buttonClickHandler = (page) => {
+type PropsType = {
+  pages: number[]
+  currentPage: number
+  setCurrentPage: (arg: number | ((arg: number) => number)) => void
+}
+
+export const Pagination: FC<PropsType> = ({
+  pages,
+  currentPage,
+  setCurrentPage
+}) => {
+  const buttonClickHandler = (page: number) => {
     setCurrentPage(page)
   }
 
-  const prevNextFirstLastHandler = (direction) => {
+  const prevNextFirstLastHandler = (direction: string) => {
     switch (direction) {
       case PREV:
         setCurrentPage((prev) => --prev)

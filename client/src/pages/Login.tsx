@@ -1,12 +1,18 @@
-import { useState } from 'react'
+import { useState, FC } from 'react'
 import axios from '../axios'
 import { Navigate } from 'react-router-dom'
+import { AuthType, UserType } from '../App'
 
-export const Login = ({ setAuth, auth }) => {
+type PropsType = {
+  auth: AuthType
+  setAuth: (obj: AuthType) => void
+}
+
+export const Login: FC<PropsType> = ({ setAuth, auth }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const onChangeInput = (value, input) => {
+  const onChangeInput = (value: string, input: string) => {
     if (input === 'email') setEmail(value)
     else setPassword(value)
   }
@@ -17,8 +23,8 @@ export const Login = ({ setAuth, auth }) => {
         email,
         password
       })
-      const user = res.data
-      setAuth((prev) => ({ data: user, status: 'loaded' }))
+      const user: UserType = res.data
+      setAuth({ data: user, status: 'loaded' })
       window.localStorage.setItem('token', user.token)
     } catch (err) {
       alert('Не верные логин или пароль')

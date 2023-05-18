@@ -1,9 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, FC } from 'react'
 import axios from '../axios'
 import { countPage } from '../Constants'
 import { getTotalCount } from '../helpers'
+import { PostType } from '../pages/Posts'
 
-export const Post = ({
+type PropsType = {
+  post: PostType
+  setPosts: (post: PostType[]) => void
+  userId: string
+  setUpdatePost: (post: PostType) => void
+  setCurrentPage: (page: number) => void
+}
+
+export const Post: FC<PropsType> = ({
   post,
   setPosts,
   userId,

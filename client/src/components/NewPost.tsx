@@ -1,10 +1,19 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, FC } from 'react'
 import axios from '../axios'
 import sendIcon from '../assets/send.png'
 import { countPage } from '../Constants'
 import { getTotalCount } from '../helpers'
+import { PostType } from '../pages/Posts'
 
-export const NewPost = ({
+type PropsType = {
+  currentPage: number
+  setCurrentPage: (page: number) => void
+  setPosts: (posts: PostType[]) => void
+  updatePost: PostType | null
+  setUpdatePost: (post: PostType | null) => void
+}
+
+export const NewPost: FC<PropsType> = ({
   currentPage,
   setCurrentPage,
   setPosts,
@@ -14,13 +23,13 @@ export const NewPost = ({
   const [textOfPost, setTextOfPost] = useState('')
   const [fileUrl, setFileUrl] = useState('')
 
-  const inputFile = useRef(null)
+  const inputFile = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
     if (updatePost) setTextOfPost(updatePost.message)
   }, [updatePost])
 
-  const changeTextHandler = (event) => {
+  const changeTextHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextOfPost(event.target.value)
   }
 
@@ -51,13 +60,15 @@ export const NewPost = ({
   }
 
   const chooseFileForSend = () => {
-    inputFile.current.click()
+    inputFile.current?.click()
   }
 
-  const changeInputFileHandler = async (event) => {
+  const changeInputFileHandler = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     try {
       const formData = new FormData()
-      formData.append('file', event.target.files[0])
+      if (event.target.files) formData.append('file', event.target.files[0])
       const res = await axios.post('/api/upload', formData)
       const fileUrl = res.data.url
       setFileUrl(fileUrl)
@@ -67,7 +78,7 @@ export const NewPost = ({
     }
   }
 
-  const ctrlEnterHandler = (event) => {
+  const ctrlEnterHandler = (event: React.KeyboardEvent) => {
     if ((event.keyCode === 10 || event.keyCode === 13) && event.ctrlKey) {
       sendHandler()
     }

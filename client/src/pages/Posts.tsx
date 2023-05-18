@@ -1,4 +1,5 @@
 import axios from '../axios'
+import { FC } from 'react'
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Post } from '../components/Post'
@@ -7,18 +8,32 @@ import { Pagination } from '../components/Pagination'
 import { countPage } from '../Constants'
 import { useChatScroll } from '../hooks'
 import { getTotalCount } from '../helpers'
+import { UserType, AuthType } from '../App'
 
-export const Posts = ({ auth }) => {
-  const [posts, setPosts] = useState(null)
-  const [pages, setPages] = useState([])
+export type PostType = {
+  _id: string
+  message: string
+  user: UserType
+  mediaUrl: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+type PropsType = {
+  auth: AuthType
+}
+
+export const Posts: FC<PropsType> = ({ auth }) => {
+  const [posts, setPosts] = useState<PostType[] | null>(null)
+  const [pages, setPages] = useState<number[]>([])
   // const [totalCount, setTotalCount] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
 
-  const [updatePost, setUpdatePost] = useState(null)
+  const [updatePost, setUpdatePost] = useState<PostType | null>(null)
 
   const ref = useChatScroll(posts)
 
-  const createArrFromPageNumber = (pages) => {
+  const createArrFromPageNumber = (pages: number) => {
     const pagesArr = []
     for (let i = 1; i <= pages; i++) {
       pagesArr.push(i)
@@ -72,7 +87,7 @@ export const Posts = ({ auth }) => {
                   post={elem}
                   setCurrentPage={setCurrentPage}
                   setPosts={setPosts}
-                  userId={auth.data._id}
+                  userId={auth.data?._id}
                   setUpdatePost={setUpdatePost}
                 />
               )
