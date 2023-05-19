@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request } from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import mongoose from 'mongoose'
@@ -31,11 +31,15 @@ const app = express()
 
 const PORT = process.env.PORT || 4444
 
+interface MyRequest extends Request {
+  originalnameFile: string
+}
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads')
   },
-  filename: (req, file, cb) => {
+  filename: (req: MyRequest, file, cb) => {
     req.originalnameFile = Date.now() + '_' + file.originalname
     cb(null, req.originalnameFile)
   }
@@ -62,11 +66,16 @@ app.post(
   UserController.register
 )
 
-app.post('/api/upload', checkAuth, upload.single('file'), (req, res) => {
-  return res.json({
-    url: `uploads/${req.originalnameFile}`
-  })
-})
+app.post(
+  '/api/upload',
+  checkAuth,
+  upload.single('file'),
+  (req: MyRequest, res) => {
+    return res.json({
+      url: `uploads/${req.originalnameFile}`
+    })
+  }
+)
 
 app.get('/api/posts', checkAuth, PostController.getAll)
 app.get('/api/posts/:id', checkAuth, PostController.getOne)
@@ -98,10 +107,10 @@ app.get('*', (req, res) => {
   return res.status(404).end()
 })
 
-app.listen(PORT, (err) => {
+app.listen(PORT, () => {
   const uploadDir = path.join(__dirname, 'uploads')
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir)
   }
-  console.log(err ? err : `Server started... PORT ${PORT}`)
+  console.log(`Server started... PORT ${PORT}`)
 })
