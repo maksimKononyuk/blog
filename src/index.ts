@@ -1,4 +1,4 @@
-import express, { Request } from 'express'
+import express, { Request, Response } from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import mongoose from 'mongoose'
@@ -36,7 +36,7 @@ interface MyRequest extends Request {
 }
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (_, __, cb) => {
     cb(null, 'uploads')
   },
   filename: (req: MyRequest, file, cb) => {
@@ -70,7 +70,7 @@ app.post(
   '/api/upload',
   checkAuth,
   upload.single('file'),
-  (req: MyRequest, res) => {
+  (req: MyRequest, res: Response) => {
     return res.json({
       url: `uploads/${req.originalnameFile}`
     })
@@ -95,15 +95,15 @@ app.put(
   PostController.update
 )
 
-app.get('/health/status', (req, res) => {
+app.get('/health/status', (_, res: Response) => {
   return res.status(200).end()
 })
 
-app.get('/', (req, res) => {
+app.get('/', (_, res: Response) => {
   return res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
 })
 
-app.get('*', (req, res) => {
+app.get('*', (_, res: Response) => {
   return res.status(404).end()
 })
 
