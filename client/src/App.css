@@ -118,6 +118,8 @@ button {
 }
 .post-block_message {
   margin-top: 10px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  white-space: pre-line;
 }
 .post-block_image {
   display: block;

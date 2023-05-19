@@ -32,7 +32,7 @@ export const Post: FC<PropsType> = ({
           {isUpdated && 'Изменено'} {date}
         </h5>
       </div>
-      <p className='post-block_message'>{post.message}</p>
+      <pre className='post-block_message'>{post.message}</pre>
       {post.mediaUrl && (
         <a className='post-block_image' href={post.mediaUrl} target='blank'>
           <img src={post.mediaUrl} alt='media' />
