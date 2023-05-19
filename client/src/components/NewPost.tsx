@@ -50,7 +50,7 @@ export const NewPost: FC<PropsType> = ({
         })
       }
     }
-    const res = await axios.get(
+    const res = await axios.get<{ posts: PostType[] }>(
       `/api/posts?count=${countPage}&page=${currentPage}`
     )
     setPosts(res.data.posts)
@@ -69,7 +69,7 @@ export const NewPost: FC<PropsType> = ({
     try {
       const formData = new FormData()
       if (event.target.files) formData.append('file', event.target.files[0])
-      const res = await axios.post('/api/upload', formData)
+      const res = await axios.post<{ url: string }>('/api/upload', formData)
       const fileUrl = res.data.url
       setFileUrl(fileUrl)
     } catch (err) {

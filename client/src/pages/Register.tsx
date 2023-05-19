@@ -1,19 +1,28 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Navigate } from 'react-router-dom'
+import { UserType } from '../hooks/appHook'
 import axios from '../axios'
 
+type AuthDataType = {
+  fullName: string
+  email: string
+  password: string
+}
+
+const initialState: AuthDataType = {
+  fullName: '',
+  email: '',
+  password: ''
+}
+
 export const Register = () => {
-  const [authData, setAuthData] = useState({
-    fullName: '',
-    email: '',
-    password: ''
-  })
+  const [authData, setAuthData] = useState(initialState)
   const [isRegister, setIsRegister] = useState(false)
 
   const registerHandler = async () => {
     if (authData.fullName && authData.email && authData.password) {
       try {
-        const res = await axios.post('/api/auth/register', {
+        const res = await axios.post<UserType>('/api/auth/register', {
           fullName: authData.fullName,
           email: authData.email,
           password: authData.password

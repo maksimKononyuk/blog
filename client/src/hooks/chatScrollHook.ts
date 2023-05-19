@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { PostType } from './pages/Posts'
+import { PostType } from '../pages/Posts'
 
 export const useChatScroll = (dep: PostType[] | null) => {
   const ref = useRef<HTMLDivElement | null>(null)

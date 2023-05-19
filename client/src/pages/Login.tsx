@@ -1,7 +1,7 @@
-import { useState, FC } from 'react'
-import axios from '../axios'
+import React, { FC } from 'react'
 import { Navigate } from 'react-router-dom'
-import { AuthType, UserType } from '../App'
+import { AuthType } from '../hooks/appHook'
+import { useLoginHook } from '../hooks/loginHook'
 
 type PropsType = {
   auth: AuthType
@@ -9,29 +9,10 @@ type PropsType = {
 }
 
 export const Login: FC<PropsType> = ({ setAuth, auth }) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const { onChangeInput, loginButtonHandler, email, password } =
+    useLoginHook(setAuth)
 
-  const onChangeInput = (value: string, input: string) => {
-    if (input === 'email') setEmail(value)
-    else setPassword(value)
-  }
-
-  const loginButtonHandler = async () => {
-    try {
-      const res = await axios.post('/api/auth/login', {
-        email,
-        password
-      })
-      const user: UserType = res.data
-      setAuth({ data: user, status: 'loaded' })
-      window.localStorage.setItem('token', user.token)
-    } catch (err) {
-      alert('Не верные логин или пароль')
-    }
-  }
-
-  if (auth.data) {
+  if (auth.data._id) {
     return <Navigate to='/' />
   }
 

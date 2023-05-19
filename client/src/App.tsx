@@ -1,49 +1,13 @@
 import './App.css'
-import axios from './axios'
-import { useState, useEffect } from 'react'
+import React from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import { Register } from './pages/Register'
 import { Login } from './pages/Login'
 import { Posts } from './pages/Posts'
-
-export type UserType = {
-  _id: string
-  fullName: string
-  email: string
-  createdAt: Date
-  updatedAt: Date
-  token: string
-}
-
-export type AuthType = {
-  data: null | UserType
-  status: string
-}
+import { useAppHook } from './hooks/appHook'
 
 function App() {
-  const [auth, setAuth] = useState<AuthType>({
-    data: null,
-    status: 'loading'
-  })
-
-  useEffect(() => {
-    const authMe = async () => {
-      try {
-        const res = await axios.get('/api/auth/me')
-        setAuth({ data: res.data, status: 'loaded' })
-      } catch (err) {
-        setAuth({ data: null, status: 'loaded' })
-        console.log('Ошибка авторизации')
-      }
-    }
-    authMe()
-  }, [])
-
-  const logoutButtonHandler = () => {
-    if (window.confirm('Вы действительно хотите выйти из аккаунта?'))
-      setAuth({ data: null, status: 'loaded' })
-    window.localStorage.removeItem('token')
-  }
+  const { auth, logoutButtonHandler, setAuth } = useAppHook()
 
   return (
     <>

@@ -1,13 +1,11 @@
-import { useState, useEffect, FC } from 'react'
-import axios from '../axios'
-import { countPage } from '../Constants'
-import { getTotalCount } from '../helpers'
+import { FC } from 'react'
+import { usePostHook } from '../hooks/postHook'
 import { PostType } from '../pages/Posts'
 
 type PropsType = {
   post: PostType
   setPosts: (post: PostType[]) => void
-  userId: string
+  userId: string | null
   setUpdatePost: (post: PostType) => void
   setCurrentPage: (page: number) => void
 }
@@ -19,36 +17,8 @@ export const Post: FC<PropsType> = ({
   setUpdatePost,
   setCurrentPage
 }) => {
-  const [date, setDate] = useState('')
-  const [isUpdated, setIsUpdated] = useState(false)
-  const [isDisabeled, setIsDisabeled] = useState(false)
-
-  const removePostHandler = async () => {
-    setIsDisabeled(true)
-    try {
-      await axios.delete(`/api/posts/${post._id}`)
-      const lastPage = await getTotalCount()
-      setCurrentPage(lastPage)
-      const res = await axios.get(
-        `/api/posts?count=${countPage}&page=${lastPage}`
-      )
-      setPosts(res.data.posts)
-    } catch (err) {
-      console.log('Не удалось удалить пост')
-    }
-  }
-
-  const updateHandler = () => {
-    setUpdatePost(post)
-  }
-
-  useEffect(() => {
-    const updatedAt = new Date(post.updatedAt)
-    const createdAt = new Date(post.createdAt)
-    setIsUpdated(updatedAt.getTime() !== createdAt.getTime())
-    const formatedDate = updatedAt.toLocaleString().slice(0, -3)
-    setDate(formatedDate)
-  }, [post.updatedAt, post.createdAt])
+  const { date, isUpdated, isDisabeled, removePostHandler, updateHandler } =
+    usePostHook(setCurrentPage, post, setPosts, setUpdatePost)
 
   return (
     <div
