@@ -4,6 +4,13 @@ export interface RequestWithUserId extends Request {
   userId: string
 }
 
+export interface RequestWithQuery extends Request {
+  query: {
+    count: string
+    page: string
+  }
+}
+
 export interface RequestWithUserIdAndBody extends Request {
   userId: string
   body: {

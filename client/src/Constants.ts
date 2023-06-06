@@ -1,3 +1,7 @@
+import { connect } from 'socket.io-client'
+
+export const socket = connect('/')
+
 export const countPage = 20
 export const baseUrl = 'http://localhost:1475/'
 

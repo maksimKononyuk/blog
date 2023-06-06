@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Post } from '../components/Post'
 import { NewPost } from '../components/NewPost'
 import { Pagination } from '../components/Pagination'
@@ -30,8 +30,9 @@ export const Posts: FC<PropsType> = ({ auth }) => {
     setUpdatePost,
     updatePost
   } = usePostsHook()
+  const navigate = useNavigate()
   if (!auth.data._id) {
-    return <Navigate to='/login' />
+    navigate('/login')
   }
 
   return (

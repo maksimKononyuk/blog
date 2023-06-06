@@ -1,4 +1,6 @@
 import express, { Request, Response } from 'express'
+import { Server } from 'http'
+import { Server as WSServer } from 'socket.io'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import mongoose from 'mongoose'
@@ -31,6 +33,13 @@ const app = express()
 
 const PORT = process.env.PORT || 4444
 
+const wsServer = new Server(app)
+export const ws = new WSServer(wsServer, {
+  cors: {
+    origin: 'http://localhost:3000'
+  }
+})
+
 interface MyRequest extends Request {
   originalnameFile: string
 }
@@ -48,7 +57,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 app.use(express.json())
-app.use(cors())
+if (process.env.NODE_ENV === 'development') app.use(cors())
 app.use('/', express.static(path.join(__dirname, '../', 'client', 'build')))
 app.use('/uploads', express.static('uploads'))
 
@@ -107,9 +116,15 @@ app.get('*', (_, res: Response) => {
   return res.status(404).end()
 })
 
-app.listen(PORT, () => {
+ws.on('connection', (socket) => {
+  console.log(`${socket.id} user подключился`)
+  socket.on('disconnect', () => {
+    console.log(`${socket.id} user отключился`)
+  })
+})
+
+wsServer.listen(PORT, () => {
   const uploadDir = path.join(__dirname, '../', 'uploads')
-  console.log(uploadDir)
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir)
   }

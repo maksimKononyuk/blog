@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import axios from '../axios'
+import { socket } from '../Constants'
 
 export type UserType = {
   _id: string | null
@@ -40,6 +41,9 @@ export const useAppHook = () => {
       }
     }
     authMe()
+    return () => {
+      socket.disconnect()
+    }
   }, [])
 
   const logoutButtonHandler = useCallback(() => {

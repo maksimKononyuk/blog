@@ -3,8 +3,10 @@ import PostModel from '../Models/Post.js'
 import {
   UserFromDBType,
   RequestWithUserIdAndBody,
-  RequestWithUserId
+  RequestWithUserId,
+  RequestWithQuery
 } from '../types/types.js'
+import { ws } from '../index.js'
 
 type PostType = {
   user: UserFromDBType
@@ -25,6 +27,9 @@ export const create = async (req: RequestWithUserIdAndBody, res: Response) => {
     })
 
     const post = await doc.save()
+    ws.emit('newMessage', {
+      text: 'Пошел на хуй'
+    })
     return res.json(post)
   } catch (err) {
     console.log(err)
@@ -32,7 +37,7 @@ export const create = async (req: RequestWithUserIdAndBody, res: Response) => {
   }
 }
 
-export const getAll = async (req: Request, res: Response) => {
+export const getAll = async (req: RequestWithQuery, res: Response) => {
   try {
     const count = +req.query.count || 20
     if (count > 20)

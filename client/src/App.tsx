@@ -21,10 +21,12 @@ function App() {
           </Link>
         </div>
         <div className='header_buttons'>
-          <Link to={!auth.data ? '/login' : '/add_post'}>
-            <button>{!auth.data ? 'Войти' : 'Создать пост'}</button>
-          </Link>
-          {!auth.data ? (
+          {!auth.data._id && (
+            <Link to={'/login'}>
+              <button>{'Войти'}</button>
+            </Link>
+          )}
+          {!auth.data._id ? (
             <Link to='/register'>
               <button>Регистрация</button>
             </Link>
