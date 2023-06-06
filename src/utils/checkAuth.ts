@@ -1,16 +1,12 @@
 import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
-import { ResDataErrorType } from '../types/types.js'
+import { ResDataErrorType, RequestWithUserId } from '../types/types.js'
 
 type JwtType = {
   _id: string
 }
 
-interface MyRequest extends Request {
-  userId: string
-}
-
-export default (req: MyRequest, res: Response, next: () => void) => {
+export default (req: RequestWithUserId, res: Response, next: () => void) => {
   const token = (req.headers.authorization || '').replace(/Bearer\s?/, '')
   if (token) {
     try {
