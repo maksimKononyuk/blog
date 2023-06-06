@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Post } from '../components/Post'
 import { NewPost } from '../components/NewPost'
@@ -20,6 +20,7 @@ type PropsType = {
 }
 
 export const Posts: FC<PropsType> = ({ auth }) => {
+  const navigate = useNavigate()
   const {
     pages,
     currentPage,
@@ -29,11 +30,12 @@ export const Posts: FC<PropsType> = ({ auth }) => {
     setPosts,
     setUpdatePost,
     updatePost
-  } = usePostsHook()
-  const navigate = useNavigate()
-  if (!auth.data._id) {
-    navigate('/login')
-  }
+  } = usePostsHook(auth)
+  useEffect(() => {
+    if (!auth.data._id) {
+      navigate('/login')
+    }
+  }, [])
 
   return (
     <div className='posts-block'>

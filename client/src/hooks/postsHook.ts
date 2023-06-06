@@ -4,8 +4,9 @@ import { useChatScroll } from './chatScrollHook'
 import { getTotalCount } from '../helpers'
 import axios from '../axios'
 import { countPage, socket } from '../Constants'
+import { AuthType } from './appHook'
 
-export const usePostsHook = () => {
+export const usePostsHook = (auth: AuthType) => {
   const [posts, setPosts] = useState<PostType[] | null>(null)
   const [pages, setPages] = useState<number[]>([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -22,10 +23,12 @@ export const usePostsHook = () => {
 
   // Здесь мы просто получаем totalCount, чтобы определить сколько у нас будет страниц и устанавливаем последнюю страницу текущей. Это позволит при загрузке постов всегда выводить самые свежие)))
   useEffect(() => {
-    ;(async () => {
-      const lastPage = await getTotalCount()
-      setCurrentPage(lastPage)
-    })()
+    if (auth.data._id) {
+      ;(async () => {
+        const lastPage = await getTotalCount()
+        setCurrentPage(lastPage)
+      })()
+    }
   }, [])
 
   const getPosts = useCallback(async () => {
@@ -41,7 +44,9 @@ export const usePostsHook = () => {
   }, [currentPage, createArrFromPageNumber])
 
   useEffect(() => {
-    getPosts()
+    if (auth.data._id) {
+      getPosts()
+    }
   }, [getPosts])
 
   useEffect(() => {
