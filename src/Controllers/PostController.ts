@@ -1,12 +1,22 @@
+import { Request, Response } from 'express'
 import PostModel from '../Models/Post.js'
+import {
+  UserFromDBType,
+  RequestWithUserIdAndBody,
+  RequestWithUserId
+} from '../types/types.js'
 
-const hidePasswordHash = (post) => {
+type PostType = {
+  user: UserFromDBType
+}
+
+const hidePasswordHash = (post: PostType) => {
   // Убираем хеш паролея перед отправкой на фронт одного поста
   const { passwordHash, ...userData } = post.user._doc
   return userData
 }
 
-export const create = async (req, res) => {
+export const create = async (req: RequestWithUserIdAndBody, res: Response) => {
   try {
     const doc = new PostModel({
       message: req.body.message,
@@ -22,12 +32,12 @@ export const create = async (req, res) => {
   }
 }
 
-export const getAll = async (req, res) => {
+export const getAll = async (req: Request, res: Response) => {
   try {
-    const count = req.query.count || 20
+    const count = +req.query.count || 20
     if (count > 20)
       throw new Error('Превышен возвращаемый лимит в 20 сообщений')
-    const page = req.query.page || 1
+    const page = +req.query.page || 1
     const skip = (page - 1) * count
     const totalCount = await PostModel.countDocuments()
     if (!totalCount) {
@@ -42,8 +52,9 @@ export const getAll = async (req, res) => {
       .limit(count)
       .exec()
 
-    posts.forEach((post) => {
+    posts.forEach((elem) => {
       // Убираем хеши паролей перед отправкой на фронт массива постов
+      const post: PostType = elem as unknown as PostType
       post.user._doc = hidePasswordHash(post)
     })
 
@@ -56,11 +67,13 @@ export const getAll = async (req, res) => {
   }
 }
 
-export const getOne = async (req, res) => {
+export const getOne = async (req: Request, res: Response) => {
   try {
     const postId = req.params.id
 
-    const post = await PostModel.findById(postId).populate('user').exec()
+    const post = (await PostModel.findById(postId)
+      .populate('user')
+      .exec()) as unknown as PostType
 
     // Убираем хеш паролея перед отправкой на фронт одного поста
     post.user._doc = hidePasswordHash(post)
@@ -72,7 +85,7 @@ export const getOne = async (req, res) => {
   }
 }
 
-export const remove = async (req, res) => {
+export const remove = async (req: RequestWithUserId, res: Response) => {
   try {
     const postId = req.params.id
 
@@ -94,7 +107,7 @@ export const remove = async (req, res) => {
   }
 }
 
-export const update = async (req, res) => {
+export const update = async (req: RequestWithUserIdAndBody, res: Response) => {
   try {
     const postId = req.params.id
 

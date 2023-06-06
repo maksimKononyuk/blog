@@ -6,19 +6,9 @@ import {
   ResDataErrorType,
   UserCreateType,
   UserModelType,
-  RequestWithUserId
+  RequestWithUserId,
+  UserFromDBType
 } from '../types/types.js'
-
-type UserFromDBType = {
-  _doc: {
-    _id: string
-    fullName: string
-    email: string
-    passwordHash: string
-    createdAt: Date
-    updatedAt: Date
-  }
-}
 
 interface RequestWithBody extends Request {
   body: UserCreateType
