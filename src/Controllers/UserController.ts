@@ -94,7 +94,9 @@ export const login = async (req: Request, res: Response) => {
 
 export const getMe = async (req: RequestWithUserId, res: Response) => {
   try {
-    const user = await UserModel.findOne({ _id: req.userId })
+    const user = await UserModel.findOne<UserFromDBType>({
+      _id: req.userId
+    })
     if (!user) {
       return res.status(404).json({
         message: 'Пользователь не найден'
@@ -102,7 +104,7 @@ export const getMe = async (req: RequestWithUserId, res: Response) => {
     }
 
     //здесь мы просто вытаскиваем из объекта документа свойство passwordHash, чтоб не передавать его на фронт
-    const { passwordHash, ...userData } = user //user._doc TODO
+    const { passwordHash, ...userData } = user._doc //user._doc TODO
 
     return res.json({ ...userData })
   } catch (err) {

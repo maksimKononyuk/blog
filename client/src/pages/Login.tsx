@@ -18,7 +18,7 @@ export const Login: FC<PropsType> = ({ setAuth, auth }) => {
 
   return (
     <div className='register-block'>
-      <div>{auth.data._id} мать вашу</div>
+      <div>{auth.data._id}</div>
       <div className='register-block_tytle'>Вход в аккаунт</div>
       <div className='register-block_inputs'>
         <input

@@ -108,7 +108,8 @@ app.get('*', (_, res: Response) => {
 })
 
 app.listen(PORT, () => {
-  const uploadDir = path.join(__dirname, 'uploads')
+  const uploadDir = path.join(__dirname, '../', 'uploads')
+  console.log(uploadDir)
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir)
   }
