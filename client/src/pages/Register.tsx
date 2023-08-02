@@ -29,7 +29,6 @@ export const Register = () => {
         })
         const user = res.data
         if (user) {
-          console.log('Пользователь создан')
           setIsRegister(true)
         }
       } catch (err) {

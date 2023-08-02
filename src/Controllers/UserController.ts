@@ -17,8 +17,7 @@ interface RequestWithBody extends Request {
 export const register = async (req: RequestWithBody, res: Response) => {
   try {
     const { password, fullName, email } = req.body
-    console.log(password, fullName, email)
-    const candidate = await UserModel.findOne({ email: req.body.email })
+    const candidate = await UserModel.findOne({ email })
     if (candidate) {
       return res.status(400).json({
         message: 'Такой пользователь уже существует!'
