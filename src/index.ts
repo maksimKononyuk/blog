@@ -112,9 +112,9 @@ app.get('/*', (_, res: Response) => {
   return res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
 })
 
-app.get('*', (_, res: Response) => {
-  return res.status(404).end()
-})
+// app.get('*', (_, res: Response) => {
+//   return res.status(404).end()
+// })
 
 ws.on('connection', (socket) => {
   console.log(`${socket.id} user подключился`)
