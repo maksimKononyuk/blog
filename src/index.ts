@@ -108,7 +108,7 @@ app.get('/health/status', (_, res: Response) => {
   return res.status(200).end()
 })
 
-app.get('/*', (_, res: Response) => {
+app.get('*', (_, res: Response) => {
   return res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
 })
 
